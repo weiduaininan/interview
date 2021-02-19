@@ -1,0 +1,55 @@
+/**
+ * @authors LiuNan
+ * @email   bj_liunan@126.com
+ * @date    2021-02-19 12:46:46
+ */
+
+//php基础部分
+
+//1.什么是引用变量  //用不同的名字访问同一个变量内容 使用&符号
+//
+//COW机制  copy on write
+//
+//memory_get_usage(); //打印内存信息
+//
+//变量和引用变量 指向同一个内存空间 在修改值得时候 不会重新添加新的内存空间
+
+$a = range(0, 3);
+xdebug_debug_zval('a'); //xdebug_debug_zval  可以查看Zval容器内的变量信息  refcount代表的是 有多少个变量指向这一个内存空间 is_ref代表的是是不是引用
+
+// a: (refcount=1, is_ref=0)=array (
+// 0 => (refcount=0, is_ref=0)=0,
+// 1 => (refcount=0, is_ref=0)=1,
+// 2 => (refcount=0, is_ref=0)=2,
+// 3 => (refcount=0, is_ref=0)=3)
+//
+//
+//unset();  //unset 只会取消引用，不会销毁空间
+
+// // 对象本身就是引用传递
+// class Person
+// {
+//     public $name = "zhangsan";
+// }
+
+// $p1 = new Person;
+// xdebug_debug_zval('p1');
+
+// $p2 = $p1;
+// xdebug_debug_zval('p1');
+
+// $p2->name = "lisi";
+// xdebug_debug_zval('p1');
+
+
+$data = ['a', 'b', 'c'];
+
+foreach ($data as $key=>$val)
+{
+    $val = &$data[$key];
+    var_dump($data);
+}
+
+var_dump($data);
+
+b c c

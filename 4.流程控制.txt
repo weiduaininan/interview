@@ -1,0 +1,39 @@
+PHP的遍历数组的三种方式及各自的区别
+
+
+for循环         只能遍历索引数组
+foreach         可以遍历索引数组和关联数组
+list(),each(),while  同样可以遍历索引数组和关联数组
+
+
+if(){  //总是把有限范围小的小件放前面处理
+  
+} else{
+  
+}
+
+switch case 
+
+switch ($var){ //$var值 只可以是 整型、浮点或者字符串
+  case var:
+  case var:
+  default: 
+  break;
+}
+continue; 跳出当前循环   类似break; 
+continue2; 跳出两层循环 
+
+如果是多层比较  使用switch case 效率相对来说会快一些
+
+
+foreach 有reset特性   list(),each() 没有该特性  完全看指针位置开始遍历
+
+switch case 底层会生成带索引的表 直接跳转到对应case  不需要一层一层判断  效率相对较高
+
+
+
+PHP如何优化多个if...elseif...语句的情况
+
+可能性较大的放前面判断
+
+如果是比较复杂判断逻辑 值是整型浮点字符串的值  推荐使用switch case

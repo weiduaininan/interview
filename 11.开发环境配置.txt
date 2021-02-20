@@ -1,0 +1,10 @@
+PHP运行原理
+Nginx+PHP-FPM
+
+浏览器=》nginx服务器=》PHP-FPM=》FastCGI=》nginx服务器=》浏览器
+
+CGI      nginx和php进行通信 一个请求一个进程  
+
+FastCGI  fast-cgi则是一个进程可以处理多个请求  CGI的改良版本
+
+PHP-FPM 是 PHP FastCGI  进程管理器

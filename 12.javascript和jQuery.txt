@@ -1,0 +1,8 @@
+JavaScript基础语法
+
+变量必须以字母开头、$、_
+变量使用 var 
+未赋值的变量为  undefined
+数据类型 字符串 数字 布尔 数组 对象 Null Undefined
+
+JavaScript内置对象

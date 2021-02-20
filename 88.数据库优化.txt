@@ -1,0 +1,158 @@
+数据库优化的目的：
+		避免出现页面访问错误
+				由于数据库连接timeout产生页面5XX错误
+				由于慢查询造成页面无法加载
+				由于阻塞造成数据无法提交
+		增加数据库恩稳定性
+				很多数据库问题都是由于低效的查询引起的
+		优化用户体验
+				流畅页面的访问速度
+				良好的网站功能体验
+
+跟慢查询相关的设置语句：
+
+//查看慢查询相关信息 （日志位置，是否开启的状态）
+show variables like 'slow%'
+
+//开启记录未使用索引的查询
+set global log_queries_not_using_indexes=on;
+
+//开启慢查询日志
+set global slow_query_log=on;
+
+//设置慢查询 时间条件
+set global long_query_time=1;
+如果设置long_query_time发现值没有改变，可以关掉窗口重开查看。
+如果删除了慢查询日志，需要执行flush logs。
+开启SQL消耗时间：set profiling=1；查询是否开启：select @@profiling。
+
+show profiles 诊断性能
+show profile for query 2;
+
+   
+如何分析SQL查询
+. explain返回割裂的含义
+. extra列需要注意的返回值
+Using filesort:看到这个的时候,查询就需要优化了.
+Using temporary:看到这个的时候,查询需要优化
+
+max()使用索引，不需要扫描行了。称为覆盖索引
+count(*)和count(列)的区别在于count(*)会统计null的行,而count(列)不会;
+如果是列是不允许为空的,那么count(列)效率更高
+
+
+分析优化
+使用explain查询SQL的执行计划
+
+更改结果显示可以在语句后面加上“\G”。
+explain 返回各列的含义
+table：显示这一行的数据时关于哪张表的
+type：显示连接使用了何种类型 const、eq_reg、ref、range、index和ALL；const：主键、索引；eq_reg：主键、索引的范围查找；ref：连接的查找（join），range：索引的范围查找；index：索引的扫描；
+possible_keys：显示可能应用在这张表中的索引，如果为空，没有可能的索引
+
+
+慢查询sql 工具 
+mysqldumpslow
+pt_query_digest
+
+
+通常情况下，需要把子查询优化为join查询，注意关联键是否一对多，注意 distinct 重复数据 
+
+limit常用于分页处理，时常会伴随order by从句使用，因此大多时候会使用Filesorts这样会造成大量的io问题
+1.使用有索引的列或主键进行order by操作
+2.记录上次返回的主键，在下次查询时使用主键过滤
+即将：select film_id,description from sakila.film order by film_id limit 50,5;
+改为：select film_id,description from sakila.film where file_id >55 and film_id<=60 order by film_id limit 1,5;
+
+
+
+MySQL 的索引
+1、普通索引
+2、唯一索引
+3、主键索引
+4、联合索引
+
+
+离散度：数据唯一值越多，离散度越高。例如，
+       select count(distinct id),count(distinct real_name) from user;
+id 是唯一值，所以离散度更高。而 real_name 会出现重复—>会有同名同姓的情况，所以离散度低。
+
+
+1、where、group by、order by、on 从句中出现的列
+2、索引字段越小越好
+3、离散度大的列，放在联合索引的前面
+
+
+离散度 耦合度 冗余度
+
+索引的优点：
+1、提高查询的效率：select
+
+索引的缺点：
+1、降低写入的效率：insert、update、delete
+
+索引维护工具 pt-duplicate-key-checker
+
+错误索引的结果：
+降低所有操作的效率。
+
+错误索引列表：
+1、重复索引
+查询的时候，如果加载重复索引越多，速度越慢。错误示范：
+create table user(
+    id int not null primary key,
+    username varchar(10) not null,
+    address varchar(50) not null,
+    unique(id)
+) engine=innodb;
+
+2、冗余索引
+Innodb 中，每个索引都会自动添加上主键，所以索引不用添加主键。错误示范：
+create table user(
+    id int not null primary key,
+    username varchar(10) not null,
+    address varchar(50) not null,
+    key(name, id)
+) engine=innodb;
+
+
+关于合适的数据类型的判断标准：
+1、可以存下数据的最小数据类型。
+2、使用简单的数据类型。int 比 varchar 更加简单，所以 MySQL 的处理效率会更高。
+3、尽可能使用 not null 定义字段。MySQL 中，null 需要额外的字段存储，增加了 IO 、存储的开销。
+4、尽量少用 text、blob 类型，非用不可时，最好考虑分表。
+
+MySQL 函数：
+时间：
+1、时间转时间戳：unix_timestamp("2016-08-01 13:14:00");
+2、时间戳转时间：fromm_unixtime(1508076155)
+
+IP：
+ip 转 bigint：inet_aton("192.168.168.168")
+bigint 转 ip：inet_ntoa(3232278696)
+
+
+表的范式化即数据库设计的规范化：数据表不存在非关键字段对任意关键字段的传递函数依赖，则符合第三范式。
+可以将一张数据表进行拆分，来满足第三范式的要求。
+设计表的时候符合范式化是为了：减少数据冗余、减少表的插入、更新、删除异常
+设计表的时候使用反范式化是为了：以空间换时间、增强代码的可编程性和可维护性
+不符合第三范式要求的表存在以下问题：
+1.数据冗余:（分类、分类描述）对于每一个商品都会进行记录
+2.数据插入异常
+3.数据更新异常
+4.数据删除异常
+	
+垂直拆分 - 解决宽度问题
+把原来有很多列的表拆分成多个表，原则是：
+1.把不常用的字段单独存放到一个表中
+2.把大字段独立存放在一个表中
+3.把经常使用的字段放在一起
+
+
+表的水平拆分
+为了解决单表数据量过大的问题，每个水平拆分表的结构完全一致
+方法
+1.对id进行hash运算，可以取mod
+挑战
+1.跨分区进行数据查询
+2。统计及后台报表操作

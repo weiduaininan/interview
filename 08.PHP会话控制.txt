@@ -1,0 +1,37 @@
+1、为什么要使用会话控制技术：
+因为http协议是无状态协议，所以同一个用户在请求同一个页面两次的时候，
+http协议不会认为这两次请求都来自于同一个用户，会把它们当做是两次请求的独立，
+如果用户已经执行了登录操作，再次请求页面，
+http协议不会认为该用户已经做过登录，那么会话控制技术就是为了解决这个问题。
+
+2、实现方式
+通过GET传参。
+通过cookie存储。
+通过session存储。
+
+Cookie  存储在客户端的文件信息
+
+setcookie($name,$value,$expire);
+
+$_COOKIE
+
+setcookie();
+
+setcookie($name,'',time()-1000);
+
+Session  存储在服务器端的文件信息
+
+Session是基于储存在Cookie中的Session_id来运行的
+如果Cookie被禁用 可以使用url传递Session_id来获取 Session信息 
+
+<?php echo session_name().'='.$session_id(); ?>
+<?php echo SID ?> 只能判断
+<a href="1.php?PHPSESSID=$session_id">下一个页面</a>
+
+session_start();
+
+$_SESSION;
+
+$_SESSION = []; 清空
+
+$session_destroy(); 

@@ -1,0 +1,91 @@
+Linux常用命令
+sudo          使用管理员权限
+su            切换管理员
+chmod         设置目录权限
+chown         设置用户组
+
+w         用户登录信息
+top       显示进程详细数据
+ps -ef | grep php   显示php进程
+kill -9 杀一个进程  -15正常杀一个进程
+pkill -9  php-fpm          //结束所有的 php-fpm 进程
+
+shutdown  关机
+reboot    重启
+
+curl  url上传下载工具
+telnet  登陆远程服务器
+
+ping 
+
+ssh
+clear
+date
+
+apt-get yum 
+
+brew pecl
+
+find
+
+tail  more 
+
+touch
+unlink
+rename
+cat
+ln  软连接
+
+cd 
+mv
+rm
+pwd
+cp
+ls
+
+tar
+
+1、系统定时任务？
+
+crontab命令和 at命令
+
+crontab命令
+crontab -e
+* * * * *命令（分时日月周）
+
+at命令
+#at 2：00 tomorrow
+at>/home/Jason/do_job
+at>Ctrl+D
+ 
+
+ 
+
+2、vi/vim 编辑器 模式？
+
+一般模式、编辑模式和命令行模式
+
+ 
+
+3、shell 基础？
+
+脚本执行方式：赋予权限，直接执行，例：chmod +x test.sh；./test.sh
+
+调用解释器使得脚本执行：例：bash、csh、csh、ash、bsh、ksh等等
+
+使用source命令：例：source test.sh
+
+编写基础：开头用#！指定脚本解释器，例如：#！/bin/sh
+
+ 
+
+4、如何实现每天0点钟重新启动服务器？
+
+1、crontab -e
+
+2、0 0 * * * reboot
+
+ 
+
+
+shell基础

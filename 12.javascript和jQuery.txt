@@ -1,8 +1,66 @@
 JavaScript基础语法
 
 变量必须以字母开头、$、_
-变量使用 var 
+变量使用 var   
+变量名称大小写敏感
 未赋值的变量为  undefined
 数据类型 字符串 数字 布尔 数组 对象 Null Undefined
 
-JavaScript内置对象
+JavaScript 对象
+
+new Object();
+
+对象构造器 this.
+
+使用Json对象{}
+
+var 声明的变量是局部变量
+
+在函数外声明的变量是全局变量 所有脚本和函数都可以使用
+
+jQuery 选择器
+
+$("#lastname")     根据ID
+$(".intro")        根据class值
+$("p")             所有对应标签
+$(".intro.demo")   class下 的class
+$("p:first")       第一个P标签
+$("p:last")        最后一个P标签
+$(":input")        所有的input
+
+
+jQuery 事件
+
+bind()    绑定事件
+blur()    失去焦点
+change()  发生改变
+click()   点击事件
+dbclick() 双击事件
+focus()   获取焦点事件
+load()    加载事件
+ready()   页面加载
+
+jQuery 效果
+
+hide()    隐藏被选的元素
+show()    显示被选的元素
+
+jQuery DOM操作
+
+attr()           设置或返回匹配元素的属性和值。
+html()           设置html 或 返回 html内容
+remove()         移除所匹配的元素
+val()            设置或返回匹配元素的值。
+addClass()       向匹配的元素添加指定的类名。
+removeClass()    从所有匹配的元素中删除全部或者指定的类。
+css()            设置或返回匹配元素的样式属性。
+height()         设置或返回匹配元素的高度。
+width()          设置或返回匹配元素的宽度。
+document.getElementByID('test').className='good';
+
+
+$(function (){
+  $('.BtnOK').click(function(){
+
+  });
+});

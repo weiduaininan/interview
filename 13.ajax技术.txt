@@ -1,0 +1,65 @@
+ajax对提升用户速度，缓解服务器压力方面也是很有可取之处的，毕竟传递的数据少了
+
+1、AJAX基础概念？
+
+Asynchronous JavaScript and XML：通过在后台与服务器进行少量数据交换，AJAX可以使网页实现异步更新
+
+ 
+
+2、AJAX工作原理？
+
+XMLHttpRequest是AJAX的基础：XMLHttpRequest 用于在后台与服务器交换数据
+
+ 
+
+3、jQuery的AJAX操作？
+
+$(ele).load()、$.ajax()、$.get()、$.post()、$.getJSON()、$.getScript()
+
+
+    $.ajax({
+
+      type: 'POST',
+
+      url: '/qingadmin/admin/del?id='+id,
+
+      dataType: 'json',
+
+      success: function(data){
+
+        $(obj).parents("tr").remove();
+
+        layer.msg('已删除!',{icon:1,time:1000});
+
+      },
+
+      error:function(data) {
+
+        console.log(data.msg);
+
+      },
+
+
+      url ="/index/cart/delete_all_cart";
+      postData = {};
+      
+      $.post(url,postData,function(result){
+        if($result.status==1){
+          $(".gouwuche_check").each(function(){
+            $(this).parent().parent().parent().remove();
+          });
+          $(".total_price").html('0');
+          layer.closeAll('dialog');
+        }
+      },'json');
+
+      $.post(url,function(result){
+        if($result.status==1){
+          $(".gouwuche_check").each(function(){
+            $(this).parent().parent().parent().remove();
+          });
+          $(".total_price").html('0');
+          layer.closeAll('dialog');
+        }
+      },'json');
+

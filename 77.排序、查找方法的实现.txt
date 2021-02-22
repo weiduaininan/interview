@@ -1,0 +1,182 @@
+<?php
+function rang_array() {
+	$arr = array();
+	for ($i = 1; $i < 1000; $i++) {
+		$arr[] = range(0, 1000);
+	}
+	return $arr;
+}
+// $arr = rang_array();
+
+$arr = array(22, 6, 2, 33, 5, 55, 11, 26, 13, 44);
+
+//冒泡排序法
+function bubble_sort($arr) {
+	$count = count($arr);
+	for ($i = 0; $i < $count; $i++) {
+		for ($j = 0; $j < $count - $i - 1; $j++) {
+			if ($arr[$j] > $arr[$j + 1]) {
+				$temp = $arr[$j];
+				$arr[$j] = $arr[$j + 1];
+				$arr[$j + 1] = $temp;
+			}
+		}
+	}
+	return $arr;
+}
+
+//选择排序法
+function choose_sort($arr) {
+	$count = count($arr);
+	//双重循环完成，外层控制轮数，内层控制比较次数
+	for ($i = 0; $i < $count; $i++) {
+		$p = $i; //默认选择第i位最小值
+		for ($j = $i + 1; $j < $count; $j++) {
+			if ($arr[$j] < $arr[$p]) { //如果 P位置的值大于下一个值
+				$p = $j; //P的位置更新
+			}
+		}
+		//如果P的位置发生变化
+		if ($p != $i) {
+			$tmp = $arr[$p];
+			$arr[$p] = $arr[$i];
+			$arr[$i] = $tmp;
+		}
+	}
+	return $arr;
+}
+
+//快速排序法
+function quick_sort($arr) {
+	$len = count($arr);
+	if ($len <= 1) {
+		return $arr;
+	}
+	$base = $arr[0];
+	$left_array = array();
+	$right_array = array();
+	for ($i = 1; $i < $len; $i++) {
+		if ($arr[$i] > $base) {
+			$right_array[] = $arr[$i];
+		} else {
+			$left_array[] = $arr[$i];
+		}
+	}
+	$left_array = quick_sort($left_array);
+	$right_array = quick_sort($right_array);
+	return array_merge($left_array, array($base), $right_array);
+}
+
+//插入排序法
+function insert_sort($arr) {
+	$len = count($arr);
+	for ($i = 1; $i < $len; $i++) {
+		for ($j = $i; $j > 0; $j--) {
+			if ($arr[$j - 1] > $arr[$j]) {
+				$temp = $arr[$j];
+				$arr[$j] = $arr[$j - 1];
+				$arr[$j - 1] = $temp;
+			} else {
+				break;
+			}
+		}
+	}
+	return $arr;
+}
+//插入排序法 改良
+function insert_sort_new($arr) {
+	$len = count($arr);
+	for ($i = 1; $i < $len; $i++) {
+		$e = $arr[$i];
+		for ($j = $i; $j > 0 && $arr[$j - 1] > $e; $j--) {
+			$arr[$j] = $arr[$j - 1];
+		}
+		$arr[$j] = $e;
+	}
+	return $arr;
+}
+
+//归并排序
+function merge_sort($arr) {
+	$len = count($arr);
+	if ($len <= 1) {
+		return $arr;
+	} // 递归结束条件, 到达这步的时候, 数组就只剩下一个元素了, 也就是分离了数组
+
+	$mid = intval($len / 2); // 取数组中间
+	$left = array_slice($arr, 0, $mid); // 拆分数组0-mid这部分给左边left
+	$right = array_slice($arr, $mid); // 拆分数组mid-末尾这部分给右边right
+	$left = merge_sort($left); // 左边拆分完后开始递归合并往上走
+	$right = merge_sort($right); // 右边拆分完毕开始递归往上走
+	$arr = merge($left, $right); // 合并两个数组,继续递归
+
+	return $arr;
+}
+
+// merge函数将指定的两个有序数组(arrA, arr)合并并且排序
+function merge($arrA, $arrB) {
+	$arrC = array();
+	while (count($arrA) && count($arrB)) {
+		// 这里不断的判断哪个值小, 就将小的值给到arrC, 但是到最后肯定要剩下几个值,
+		// 不是剩下arrA里面的就是剩下arrB里面的而且这几个有序的值, 肯定比arrC里面所有的值都大所以使用
+		$arrC[] = $arrA[0] < $arrB[0] ? array_shift($arrA) : array_shift($arrB);
+	}
+	return array_merge($arrC, $arrA, $arrB);
+}
+
+//print_r(bubble_sort($arr));
+//print_r(choose_sort($arr));
+//print_r(quick_sort($arr));
+//print_r(insert_sort($arr));
+//print_r(insert_sort_new($arr));
+//print_r(merge_sort($arr));
+
+//二分查找法
+function binSearch($arr, $search) {
+	$height = count($arr) - 1;
+	$low = 0;
+	while ($low <= $height) {
+		$mid = floor(($low + $height) / 2); //获取中间数
+		if ($arr[$mid] == $search) {
+			return $mid; //返回
+		} elseif ($arr[$mid] < $search) {
+//当中间值小于所查值时，则$mid左边的值都小于$search，此时要将$mid赋值给$low
+			$low = $mid + 1;
+		} elseif ($arr[$mid] > $search) {
+//中间值大于所查值,则$mid右边的所有值都大于$search,此时要将$mid赋值给$height
+			$height = $mid - 1;
+		}
+	}
+	return "查找失败";
+}
+//二分查找递归实现
+function binSearch2($arr, $low, $height, $k) {
+	if ($low <= $height) {
+		$mid = floor(($low + $height) / 2); //获取中间数
+		if ($arr[$mid] == $k) {
+			return $mid;
+		} elseif ($arr[$mid] < $k) {
+			return binSearch2($arr, $mid + 1, $height, $k);
+		} elseif ($arr[$mid] > $k) {
+			return binSearch2($arr, $low, $mid - 1, $k);
+		}
+	}
+	return -1;
+}
+
+//顺序查找
+function seqSearch($arr, $k) {
+	foreach ($arr as $key => $val) {
+		if ($val == $k) {
+			return $key;
+		}
+	}
+	return -1;
+}
+
+$arr = array(1, 2, 3, 4);
+echo binSearch($arr, 4) . '<br/>';
+echo binSearch2($arr, 0, 4, 4) . '<br/>';
+echo seqSearch($arr, 4) . '<br/>';
+echo in_array(4, $arr) . '<br/>';
+echo array_search(4, $arr);

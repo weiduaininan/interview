@@ -1,0 +1,72 @@
+1、MySQL的关联UPDATE语句？
+
+关键UPDATE A,B：UPDATE A,B SET A.c1=B.c1,A.c2=B.c2 WHERE A.id=B.id
+
+关键A INNER JOIN B：UPDATE A INNER JOIN B ON A.id=B.id SET A.c1=B.c1,A.c2=B.c2 WHERE...…
+
+ 
+
+2、有A（id，sex，par，c1，c2），B（id，age，c1，c2）两张表，其中A.id与B.id关联，现在要求写出一条SQL语句，将B中age>50的记录的c1，c2更新到A表中统一记录中的c1，c2字段中？
+
+内连接：update A,B set A.c1=B.c1,A.c2=B.c2 where A.id=B.id and B.age>50;
+
+内连接：update A inner join B on A. id=B.id set A.c1=B.c1,A.C2=B.c2 where B.age>50
+
+ 
+
+3、mysql六种关联查询？
+
+交叉连接（CROSSJOIN），内连接（INNERJOIN），外连接（LEFT JOIN/RIGHT JOIN），联合查询（UNION与UNIONALL），全连接（FULL JOIN）
+
+ 
+
+4、mysql中为什么交叉连接实例及为什么很少用？
+
+1、SELECT*FROM A，B（，C）或者
+
+2、SELECT*FROM A CROSS JOIN B（CROSS JOIN C）
+
+3、结果笛卡尔积：没有任何关联条件，结果是笛卡尔积，结果集会很大，没有意义，很少使用
+
+ 
+
+5、mysql中的内连接实例？
+
+SELECT * FROM A，B WHERE A.id=B.id 或者
+
+SELECT * FROM A INNER JOIN B ON A.id=B.id
+
+
+多表中同时符合某种条件的数据记录的集合
+
+ 
+
+6、交叉连接SELECT * FROM A，B和内连接 SELECT * FROM A，B WHERE A.id=B.id的区别？
+
+交叉连接的结果是笛卡尔积：内连接的结果相当于筛选了，所以小了很多
+
+ 
+
+7、mysql内连接分为哪三类？
+
+等值连接：ON A.id=B.id
+
+不等值连接：ON A.id>B.id
+
+自连接：SELECT*FROM A T1 INNER JOIN A T2 ON T1.id=T2.pid
+
+ 
+
+8、mysql如何联合查询及注意？
+
+UNION关键字：SELECT*FROM A UNION SELECT*FROM B UNION...…
+
+列数相等：就是把多个结果集集中在一起，UNION前的结果为基准，需要注意的是联合查询的列数要相等，相同的记录行会合并
+
+不合并重复的记录行：如果使用UNION ALL，不会合并重复的记录行
+
+ 
+
+9、mysql如何实现全链接（MySQL不支持全连接）？
+
+可以使用LEFT JOIN 和UNION 和 RIGHT JOIN 联合使用：SELECT*FROM A LEFT JOIN B ON A.id=B.id UNION SELECT*FROM A RIGHT JOIN B ON A.id=B.id

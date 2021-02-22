@@ -1,0 +1,49 @@
+1、mvc框架单一入口的 优势 是什么？
+
+可以进行统一的安全性检查
+
+集中处理程序
+
+ 
+
+2、php视图层常见模板引擎有哪些？
+
+PHP是一种HTML内嵌式的在服务端执行的脚本语言，但是PHP有很多可以使PHP代码和HTML代码分开的模板引擎，例如：Smarty、Twig、Haml、Liquid等
+
+ 
+
+3、mvc框架中视图层模板引擎的工作原理？
+
+模板引擎就是庞大的完善的正则表达式替换库
+
+ 
+
+4、无限级分类 另外一种实现方法？
+
+|||-being
+
+id title pid path
+1  服装   0   0-1
+2  上衣   1   0-1-2
+3  长袖   2   0-1-2-3
+order by 排序
+|||-end
+
+path路径里面存父亲id到自己id的整个路径
+
+排序的话可以直接根据path来order by
+
+ 
+
+5、请写一个函数，实现以下功能：字符串“open_door”转换成“OpenDoor"、“make_byid"转换成”MakeByld”？
+
+主要就是explode函数和ucfirst函数
+
+function strHandle($str){
+    $return="";
+    $arr=explode('_',$str); 
+    foreach($arr as $val){
+        $return.=ucfirst($val); 
+        return $return;
+    }
+}

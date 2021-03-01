@@ -1,0 +1,325 @@
+*********************************************************************************
+
+获取一个文件的扩展名
+要求：dir/upload.image.jpg，找出 .jpg 或者 jpg ，
+必须使用PHP自带的处理函数进行处理，方法不能明显重复，可以封装成函数，比如 get_ext1($file_name), get_ext2($file_name)
+
+*********************************************************************************
+//最后第一次出现点之后的内容
+function get_ext1($file_name){
+　　return strrchr($file_name, ‘.’);
+}
+
+//截取文件最后一次出现点之后的内容
+function get_ext2($file_name){
+　　return substr($file_name, strrpos($file_name, ‘.’));
+}
+
+//以.拆分成数组 取出最右边的数组
+function get_ext3($file_name){
+　　$arr = explode(‘.’, $file_name);
+　　return array_pop($arr);
+}
+//直接获取路径中的拓展名
+function get_ext4($file_name){
+　　$p = pathinfo($file_name);
+　　return $p['extension'];
+}
+
+*********************************************************************************
+
+使用PHP描述冒泡排序和快速排序算法，对象可以是一个数组
+
+*********************************************************************************
+$arr = array(11,62,15,23,65,21);
+function bubble_sort($arr){
+  $len = count($arr);
+  for($i=0;$i<$len;$i++){
+    for($j=0;$j<$len-$i-1;$j++){
+      if($arr[$j]>$arr[$j]){
+        swap($arr[$j],$arr[$j+1]);
+      }
+    }
+  }
+}
+
+
+function quick_sort($arr){
+  $len = count($arr);
+  if($len <= 1){
+    return $arr;
+  }
+  $base = $arr[0];
+  $left = array();
+  $reight = array();
+  for($i=0;$i<$len;$i++){
+    if($arr[$i]<$base){
+      $left[]=$arr[$i];
+    }else{
+      $right[] = $arr[$i];
+    }
+  }
+  $left = quick_sort($left);
+  $right = quick_sort($right);
+
+  return array_merge($left,array($base),$right);
+}
+
+*********************************************************************************
+
+使用PHP描述顺序查找和二分查找（也叫做折半查找）算法，顺序查找必须考虑效率，对象可以是一个有序数组
+
+*********************************************************************************
+
+
+function binSearch($arr,$search){
+  $max = count($arr) - 1;
+  $min = 0;
+  if($min < $max){
+    $mid = intval(($min + $max)/ 2);
+    if($arr[$mid] == $search){
+      return $mid;
+    }elseif($arr[$mid] > $search){
+      $max = $mid -1;
+    }elseif($arr[$mid] < $search){
+      $min = $mid +1;
+    }
+  }
+}
+
+function seqSearch($arr, $search) {
+  foreach ($arr as $key => $val) {
+    if ($val == $search) {
+      return $key;
+    }
+  }
+}
+
+
+*********************************************************************************
+
+遍历一个路径的文件夹下所有的文件
+
+*********************************************************************************
+$file="../../php";
+function list_file($date){
+    //1、首先先读取文件夹
+    $temp=scandir($date);
+    //遍历文件夹
+    foreach($temp as $v){
+        $a=$date.'/'.$v;
+       if(is_dir($a)){//如果是文件夹则执行
+           if($v=='.' || $v=='..'){//判断是否为系统隐藏的文件.和..  如果是则跳过否则就继续往下走，防止无限循环再这里。
+               continue;
+           }
+           echo $a,"<br/>"; //把文件夹红名输出
+         
+           list_file($a);//因为是文件夹所以再次调用自己这个函数，把这个文件夹下的文件遍历出来
+       }else{
+        echo $a,"<br/>";
+       }
+    }
+}
+list_file($file);
+
+
+*********************************************************************************
+
+用一个sql语句查询出发表留言数量大于10条的用户名及其留言数量，查询结果按文章数量降序排列
+
+*********************************************************************************
+
+
+
+SELECT u.name, COUNT(*) AS total
+FROM user AS u INNER JOIN message AS m
+ON u.user_id = m.user_id
+GROUP BY u.name
+HAVING total > 10
+ORDER BY total DESC
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*********************************************************************************
+
+在 HTML 语言中，页面头部的 meta 标记可以用来输出文件的编码
+格式，以下是一个标准的 meta 语句
+<META http-equiv=’Content-Type
+‘ content=’text/html; charset=gbk’>
+请使用 PHP 语言写一个函数，把一个标准 HTML 页面中的类似 meta 标记中的 charset 部分值改为 big5
+请注意:
+(1) 需要处理完整的 html 页面，即不光此 meta 语句
+(2) 忽略大小写
+(3) ‘ 和 ” 在此处是可以互换的
+(4) ‘Content-Type’ 两侧的引号是可以忽略的，但 ‘text/html; charset=gbk’ 两侧的不行
+(5) 注意处理多余空格
+
+*********************************************************************************
+
+$html = "<meta http-equiv='Content-Type' content='text/html; charset=gbk'>";
+//正则表达式匹配标准的meta标签
+$pattern = "/<meta\s+http-equiv=(\'|\")?Content-Type(\'|\")?\s+content=(\'|\")text\/html;\s+charset=(.*)(\'|\")>/i";
+
+$replacement = "<meta http-equiv='Content-Type' content='text/html; charset=big5'>";
+
+$result = preg_replace($pattern, $replacement, $html);
+
+echo htmlspecialchars($result);
+
+
+
+
+
+
+*********************************************************************************
+写一个函数，算出两个文件的相对路径
+如 $a = ‘/a/b/c/d/e.php’;
+$b = ‘/a/b/12/34/c.php’;
+计算出 $b 相对于 $a 的相对路径应该是 ../../c/d将()添上
+*********************************************************************************
+ $a = '/a/b/c/d/e.php';
+ $b = '/a/b/12/34/c.php';
+
+ function getpathinfo( $a, $b ) {
+　　$a2array = explode('/', $a);
+　　$b2array = explode('/', $b);
+　　$pathinfo = '';
+　　for( $i = 1; $i <= count($b2array)-2; $i++ ) {
+　　  $pathinfo.=$a2array[$i] == $b2array[$i] ? '../' : $b2array[$i].'/';
+　　}
+　　print_R($pathinfo);
+ }
+ getpathinfo($a, $b);
+
+
+
+
+*********************************************************************************
+
+简述论坛中无限分类的实现原理
+
+*********************************************************************************
+
+CREATE TABLE category(
+cat_id smallint unsigned not null auto_increment primary key comment'类别ID',
+cat_name VARCHAR(30)NOT NULL DEFAULT''COMMENT'类别名称',
+parent_id SMALLINT UNSIGNED NOT NULL DEFAULT 0 COMMENT'类别父ID'
+)engine=MyISAM charset=utf8;
+
+c_id  c_name   p_id   path
+分类   分类名   父类ID  路径
+
+
+//编写一个函数，递归遍历，实现无限分类：
+function tree($arr,$pid=0,$level=0){
+    static $list = array();
+    foreach ($arr as $v) {
+        //如果是顶级分类，则将其存到$list中，并以此节点为根节点，遍历其子节点
+        if ($v['parent_id'] == $pid) {
+            $v['level'] = $level;
+            $list[] = $v;
+            tree($arr,$v['cat_id'],$level+1);
+        }
+    }
+    return $list;
+}
+
+
+
+*********************************************************************************
+
+字符串翻转     用strrev函数呗,不准用PHP内置的就自己写:
+
+*********************************************************************************
+
+
+strrev($str)
+{
+$len=strlen($str);
+$newstr = '';
+for($i=$len;$i>=0;$i--)
+{
+       $newstr .= $str{$i};
+}
+return $newstr;
+}
+
+
+
+
+
+*********************************************************************************
+
+PHP 连接Mysql数据库   PDO  Mysqli
+
+*********************************************************************************
+
+
+
+$serve = 'mysql:host=localhost:3306;dbname=examples;charset=utf8';
+$username = 'root';
+$password = 'admin123';
+
+try{ // PDO连接数据库若错误则会抛出一个PDOException异常
+  $PDO = new PDO($serve,$username,$password);
+  $result = $PDO->query('select * from customers');
+  $data = $result->fetchAll(PDO::FETCH_ASSOC); // PDO::FETCH_ASSOC表示将对应结果集中的每一行作为一个由列名索引的数组返回
+  print_r($data);
+} catch (PDOException $error){
+  echo 'connect failed:'.$error->getMessage();
+}
+
+
+
+$serve = 'localhost:3306';
+$username = 'root';
+$password = 'admin123';
+$dbname = 'examples';
+$link = mysqli_connect($serve,$username,$password,$dbname);
+mysqli_set_charset($link,'UTF-8'); // 设置数据库字符集
+$result = mysqli_query($link,'select * from customers');
+$data = mysqli_fetch_all($result); // 从结果集中获取所有数据
+print_r($data);
+
+
+
+*********************************************************************************
+
+公鸡 3 元每只，母鸡 5 元每只，小鸡 1 元 3 只，一百元钱买一百只鸡，请用伪代码写出求公鸡，母鸡和小鸡的数目
+
+*********************************************************************************
+
+for ($i = 0; $i <= (100 / 5); $i++) {
+  for ($j = 0; $j <= (100 / 3); $j++) {
+    for ($e = 0; $e <= 100; $e++) {
+      if ($i + $j + $e == 100 && (($i * 5) + ($j * 3) + ($e / 3)) == 100) {
+        echo $i . ':' . $j . ':' . $e . "\n";
+      }
+    }
+  }
+}
+
+
+*********************************************************************************
+
+1,1,2,3,5,8,13,21,34.。。。  求第 30 位的数是多少，请用伪代码描述其实现方法 
+
+*********************************************************************************
+
+$arr = [1, 1];
+for ($i = 2; $i < 30; $i++) {
+  $arr[$i] = $arr[$i - 1] + $arr[$i - 2];
+}
+$num = array_pop($arr);
+echo $num;

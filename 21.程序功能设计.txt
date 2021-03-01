@@ -82,12 +82,43 @@ try{
         exit ('Error:'.$e->getMessage());
  
 }
+
+
+$dbms='mysql';     //数据库类型
+$host='localhost'; //数据库主机名
+$dbName='test';    //使用的数据库
+$user='root';      //数据库连接用户名
+$pass='';          //对应的密码
+$dsn="$dbms:host=$host;dbname=$dbName";
+
+
+try {
+    $dbh = new PDO($dsn, $user, $pass); //初始化一个PDO对象
+    echo "连接成功<br/>";
+   
+    $sql = 'insert into messages (title, content, created_at, user_name) values(:title, :content, :created_at, :user_name)';
+
+    $rows = $dbh->query($sql);
+    if ($rows){
+       exit('操作成功');
+    } else {
+       exit('操作失败');
+    }
+} catch (PDOException $e) {
+    die ("Error!: " . $e->getMessage() . "<br/>");
+}
  
 
 真题: 设计一个无线分类表
 
+id title pid    path
+1  服装   0      0-1
+2  上衣   1      0-1-2
+3  长袖   2      0-1-2-3
 
+ath路径里面存父亲id到自己id的整个路径
 
+排序的话可以直接根据path来order by
  
 
 一般直接使用递归的方式, path只是辅助显示

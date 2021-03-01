@@ -9,7 +9,7 @@ top       显示进程详细数据
 ps -ef | grep php   显示php进程
 kill -9 杀一个进程  -15正常杀一个进程
 pkill -9  php-fpm          //结束所有的 php-fpm 进程
-
+wc 计算字节
 shutdown  关机
 reboot    重启
 

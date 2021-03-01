@@ -1,0 +1,111 @@
+1、用 PHP 获取当前时间并打印，打印格式：2006-5-10 22:21:21 
+
+date('y-n-d H:i:s');
+
+2、字符串转数组,数组转字符串,字符串截取,字符串替换,字符串查找的函数分别是什么? 
+
+explode
+implode
+substr
+preg_replace
+preg_match
+
+3、解释一下 PHP 的类中:protect,public,private,interface,abstract,final,static 的含义  
+
+protect 被保护的
+public  公共
+private 私有
+interface 接口
+abstract  抽象
+final     最终
+static    静态
+
+4、写出下列代码的数据结果 
+    
+$date = "02/23/2021";
+echo preg_replace("/^(\d+)\/(\d+)\/(\d+)$/", '$3/$1/$2', $date);
+
+5、从表 login 中选出 name 字段包含 admin 的前 10 条结果所有信息的 sql 语句 
+
+select name from login where name like "%admin%" limit 10 order by asc id 
+
+6、解释:左连接,右连接,内连接,索引 
+user left join post on user.id=post.user_id
+post right join user on post.user_id=user.id
+user inner join post on user.id=post.user_id
+
+Alter table t1 add index in_name(name); 
+Alter table t1 drop index in_name; 
+Alter table t1 add primary key(id); 
+
+7,简述论坛中无限分类的实现原理。
+id name pid path 
+1  aaa   0   0 
+2  bbb   1   0-1
+3  ccc   1   0-2 
+
+8,写一个函数，尽可能高效的，从一个标准  url  里取出文件的扩展名
+
+$str="http://www.test.com.cn/abc/de/fg.php?id=1"; 
+$str2=parse_url($str); 
+$str3=pathinfo($str2[path]); 
+echo $str3[extension]; 
+
+
+$arr = parse_url($url); 
+$file = basename($arr['path']); 
+$ext = explode(".",$file); 
+echo $ext[1];
+
+9,解释:MVC 
+model         模型
+view          视图
+controller    控制器
+
+由模型发出要实现的功能到控制器,控制器接收组织功能传递给视图; 
+
+
+10,描述一下大流量高并发量网站的解决方案 
+
+Nginx服务器  负载均衡集群
+Nginx服务器  Web Cache
+Nginx服务器  防盗链
+Nginx服务器  压缩和缓存
+
+CDN 内容分发
+LVS linux虚拟服务器
+squid 代理缓存服务器
+nginx web cache 缓存
+sphinx 全文检索引擎
+reids memcache  缓存
+数据库 分区 分库 分表
+PHP 微服务 swoole 开发
+建立独立的图片、视频服务器
+
+
+11、Mysql 数据库优化:
+1.sql 语句(索引优化,语句定位:1.慢查询  2. desc 或 explain 去解析 sql 语句,分析索引使用情况以及扫描行数) 
+2.表优化(表引擎使用:myisam 或 innodb) 
+3.数据库优化(分库分表或分区) 
+4.服务器优化(主从 mysql) 
+
+ 
+1)设置字段的索引 
+2)explain select * from t1 where name="user2"; 
+3)desc select * from t1 where name="user2"; 
+4)慢查询日志
+5)show status like 'com_%";
+
+如何设计或配置 Mysql，才能达到高效使用的目的。
+
+数据库设计方面，设计结构良好的数据库，允许部分数据冗余。 选取最适用的字段属性，尽可能把字段设置为NOTNULL，这样在查询的时候，数据库不用去比较NULL值。
+尽量使用 Innodb 引擎
+
+
+12.如何进行防 SQL 注入 
+//表单尽量用 post 提交,核心用户验证都走 post,避开 get 
+1.表单尽量用 post，表单判断控制走 get，因为 get 比 post 速度快 
+2.$_SERVER[HTTP_REFERER]判断提交者的源头 
+3.密码一定设置 md5 加密 
+4.服务器本身的安全(web+mysql)
+5.sql语句 预处理

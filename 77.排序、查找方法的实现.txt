@@ -14,7 +14,7 @@ $arr = array(22, 6, 2, 33, 5, 55, 11, 26, 13, 44);
 function bubble_sort($arr) {
 	$count = count($arr);
 	for ($i = 0; $i < $count; $i++) {
-		for ($j = 0; $j < $count - $i - 1; $j++) {
+		for ($j = 0; $j < $count - 1; $j++) {
 			if ($arr[$j] > $arr[$j + 1]) {
 				$temp = $arr[$j];
 				$arr[$j] = $arr[$j + 1];
